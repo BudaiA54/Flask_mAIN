@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Manager Dashboard{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Manager Dashboard</h1>
+        <p>Welcome, {{ current_user.username }} ({{ current_user.email }})</p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('main.manager_dashboard') }}" method="POST">
+            <div class="form-group">
+                <label for="message">Send Message to All Employees:</label>
+                <textarea name="message" id="message" placeholder="Type your message here..." required></textarea>
+            </div>
+            <button type="submit">Send Message</button>
+        </form>
+        <h2>Your Sent Messages</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    <p><strong>Sent:</strong> {{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p>{{ message.content }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No messages sent yet.</p>
+        {% endif %}
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="{{ url_for('main.logout') }}" style="color: #35424a; text-decoration: none; font-weight: bold;">Logout</a>
+        </div>
+    </div>
+{% endblock %}
